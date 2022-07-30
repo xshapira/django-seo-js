@@ -23,14 +23,14 @@ class PrerenderIO(SEOBackendBase, RequestsBasedBackend):
         """
 
         if not url or "//" not in url:
-            raise ValueError("Missing or invalid url: %s" % url)
+            raise ValueError(f"Missing or invalid url: {url}")
 
         render_url = self.BASE_URL + url
         headers = {
             'X-Prerender-Token': self.token,
         }
         if request and settings.SEND_USER_AGENT:
-            headers.update({'User-Agent': request.META.get('HTTP_USER_AGENT')})
+            headers['User-Agent'] = request.META.get('HTTP_USER_AGENT')
 
         r = self.session.get(render_url, headers=headers, allow_redirects=False)
         assert r.status_code < 500
@@ -87,6 +87,6 @@ class PrerenderHosted(PrerenderIO):
         """
         if not url:
             raise ValueError("Neither a url or regex was provided to update_url.")
-        post_url = "%s%s" % (self.BASE_URL, url)
+        post_url = f"{self.BASE_URL}{url}"
         r = self.session.post(post_url)
         return int(r.status_code) < 500

@@ -9,14 +9,10 @@ SOURCE_DIR = os.path.join(ROOT_DIR)
 
 reqs = []
 with open("requirements.txt", "r+") as f:
-    for line in f.readlines():
-        reqs.append(line.strip())
-
+    reqs.extend(line.strip() for line in f)
 test_reqs = []
 with open("requirements.tests.txt", "r+") as f:
-    for line in f.readlines():
-        test_reqs.append(line.strip())
-
+    test_reqs.extend(line.strip() for line in f)
 try:
     import pypandoc
     long_description = pypandoc.convert('README.md', 'rst')

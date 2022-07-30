@@ -11,7 +11,7 @@ class UserAgentMiddleware(SelectedBackend):
     def __init__(self, *args, **kwargs):
         super(UserAgentMiddleware, self).__init__(*args, **kwargs)
         regex_str = "|".join(settings.USER_AGENTS)
-        regex_str = ".*?(%s)" % regex_str
+        regex_str = f".*?({regex_str})"
         self.USER_AGENT_REGEX = re.compile(regex_str, re.IGNORECASE)
 
     def process_request(self, request):

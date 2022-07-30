@@ -31,10 +31,17 @@ class TestCodeFormat(unittest.TestCase):
             pep8style.ignore_code(code)
 
         for root, dirnames, filenames in os.walk(project_root):
-            if not any(folder in root for folder in ignored_folders):
-                for filename in filenames:
-                    if filename[-3:] == ".py":
-                        ALL_FILES.append(os.path.join(root, filename))
+            if all(folder not in root for folder in ignored_folders):
+                ALL_FILES.extend(
+                    os.path.join(root, filename)
+                    for filename in filenames
+                    if filename[-3:] == ".py"
+                )
+
         result = pep8style.check_files(ALL_FILES)
 
-        self.assertEqual(result.total_errors, 0, "Found %s code style errors (and warnings)." % (result.total_errors,))
+        self.assertEqual(
+            result.total_errors,
+            0,
+            f"Found {result.total_errors} code style errors (and warnings).",
+        )
